@@ -19,7 +19,6 @@ new Knp\Bundle\GaufretteBundle\KnpGaufretteBundle(),
 
 namespace CoreBundle\Entity;
 
-use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 use Youshido\ApiImagesBundle\Entity\BaseImage;
 
@@ -94,7 +93,33 @@ parameters:
     liip_imagine.filter.manager.class: Youshido\ApiImagesBundle\Service\Manager\FilterManager
 ```
 
-### Set resolver if you using AmazonS3 storage in Gaufrette:
+### Usage
+``` php
+/** @var $container ContainerInterface */
+
+$imageProvider = $container->get('youshido.image_provider');
+
+//uploading via request
+$image = $imageProvider->loadFromRequest($field); //field - name of file in request
+
+//uploading via file
+$image = $imageProvider->loadByFile($file); //file - instance of Symfony\Component\HttpFoundation\File\UploadedFile
+
+
+//uploading via url
+$image = $imageProvider->loadFromUrl($url);
+
+
+$imageHelper = $container->get('youshido.image_helper');
+
+//resizing
+$image = $imageHelper->resize($image, $width, $height, $mode);  //mode cat be "INSET" or "OUTBOUND" (see imagine documentation)
+echo $image['url'];
+
+
+``` 
+
+#### Set resolver if you using AmazonS3 storage in Gaufrette:
 ``` yaml
 youshido.images.path_resolver.default_class: Youshido\ApiImagesBundle\Service\PathResolver\AmazonS3Resolver
 ```    
