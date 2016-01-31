@@ -13,6 +13,6 @@
     "require": {
       "knplabs/knp-gaufrette-bundle": "^0.2.0",
       "liip/imagine-bundle": "^1.3",
-      "php": ">=5.5.11",
+      "php": ">=5.5.11"
     }
 }
