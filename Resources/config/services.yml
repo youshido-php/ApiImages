@@ -1,0 +1,60 @@
+parameters:
+    youshido.images.loader.gaufrette_filesystem: images
+    youshido.images.loader.gaufrette_cache_resolver.class: Youshido\ApiImagesBundle\Service\Resolver\GaufretteResolver
+
+    youshido.images.path_resolver.default_class: Youshido\ApiImagesBundle\Service\PathResolver\LocalFilesystemPathResolver
+    youshido.images.path_resolver.local.path_prefix: uploads/filesystem
+    youshido.images.path_resolver.amazons3.filesystem_service: gaufrette.images_filesystem
+
+    # !!! config from this line must be moved to main config.yml file
+    liip_imagine.cache.manager.class: Youshido\ApiImagesBundle\Service\Manager\CacheManager
+    liip_imagine.data.manager.class: Youshido\ApiImagesBundle\Service\Manager\DataManager
+    liip_imagine.filter.manager.class: Youshido\ApiImagesBundle\Service\Manager\FilterManager
+
+services:
+    ######################     Path resolvers      ######################
+
+    youshido.images.path_resolver.local:
+        class: %youshido.images.path_resolver.default_class%
+        calls:
+            - [setContainer, [@service_container]]
+
+    ######################     Gaufrette config    ######################
+
+    youshido.images.loader.stream.images:
+        class: "%liip_imagine.binary.loader.stream.class%"
+        arguments:
+            - 'gaufrette://images/'
+        tags:
+            - { name: 'liip_imagine.binary.loader', loader: 'stream.project_images' }
+
+    youshido.images.cache.resolver.images:
+        class: %youshido.images.loader.gaufrette_cache_resolver.class%
+        arguments:
+            - @liip_imagine.data.manager
+            - @liip_imagine.filter.manager
+            - @youshido.images.path_resolver.local
+        calls:
+            - [ setContainer, [@service_container]]
+        tags:
+            - { name: 'liip_imagine.cache.resolver', resolver: 'youshido.images.resolver' }
+
+
+    ######################     providers      ######################
+
+    youshido.image_helper:
+        class: Youshido\ApiImagesBundle\Service\Helper\ImageHelper
+        arguments:
+            - @liip_imagine.cache.manager
+            - @liip_imagine.filter.configuration
+
+    youshido.image_provider:
+        class: Youshido\ApiImagesBundle\Service\Provider
+        arguments: [@youshido.api_images.loader]
+        calls:
+            - [ setContainer, [@service_container]]
+
+    youshido.api_images.loader:
+        class: Youshido\ApiImagesBundle\Service\Loader\Loader
+        calls:
+            - [ setContainer, [@service_container]]

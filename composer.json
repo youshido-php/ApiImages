@@ -1,0 +1,18 @@
+{
+    "name": "youshido/api-images",
+    "description": "Load providers and resize helpers for images.",
+    "keywords": ["upload", "images", "api", "symfony", "resize"],
+    "type": "symfony-bundle",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Portey Vasil",
+            "email": "portey@gmail.com"
+        }
+    ],
+    "require": {
+      "knplabs/knp-gaufrette-bundle": "^0.2.0",
+      "liip/imagine-bundle": "^1.3",
+      "php": ">=5.5.11",
+    }
+}
