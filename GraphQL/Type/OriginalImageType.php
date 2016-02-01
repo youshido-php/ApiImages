@@ -7,8 +7,6 @@
 
 namespace Youshido\ApiImagesBundle\GraphQL\Type;
 
-
-use Youshido\ApiImagesBundle\GraphQL\Enum\ThumbnailModeTypeEnum;
 use Youshido\GraphQL\Type\Config\TypeConfigInterface;
 use Youshido\GraphQLBundle\Type\AbstractContainerAwareObjectType;
 
