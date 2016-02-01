@@ -12,7 +12,7 @@ use Youshido\ApiImagesBundle\GraphQL\Enum\ThumbnailModeTypeEnum;
 use Youshido\GraphQL\Type\Config\TypeConfigInterface;
 use Youshido\GraphQLBundle\Type\AbstractContainerAwareObjectType;
 
-class ImageType extends AbstractContainerAwareObjectType
+class OriginalImageType extends AbstractContainerAwareObjectType
 {
 
     public function resolve($value = null, $args = [])
@@ -31,10 +31,6 @@ class ImageType extends AbstractContainerAwareObjectType
     public function build(TypeConfigInterface $config)
     {
         $config
-            ->addArgument('width', 'int', ['required' => true])
-            ->addArgument('height', 'int', ['required' => true])
-            ->addArgument('mode', new ThumbnailModeTypeEnum(), ['default' => 'OUTBOUND'])
-
             ->addField('id', 'id')
             ->addField('url', 'string');
     }
