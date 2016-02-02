@@ -23,4 +23,12 @@ class AmazonS3Resolver implements PathResolverInterface
 
         return $adapter->getUrl(rtrim($filter, '/') . DIRECTORY_SEPARATOR . $path);
     }
+
+    public function generateOriginUrl($path)
+    {
+        /** @var AwsS3 $adapter */
+        $adapter = $this->getFilesystem()->getAdapter();
+
+        return $adapter->getUrl($path);
+    }
 }

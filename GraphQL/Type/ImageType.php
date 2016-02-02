@@ -8,7 +8,7 @@
 namespace Youshido\ApiImagesBundle\GraphQL\Type;
 
 
-use Youshido\ApiImagesBundle\GraphQL\Enum\ThumbnailModeTypeEnum;
+use Youshido\ApiImagesBundle\Entity\BaseImage;
 use Youshido\GraphQL\Type\Config\TypeConfigInterface;
 use Youshido\GraphQLBundle\Type\AbstractContainerAwareObjectType;
 
@@ -17,12 +17,24 @@ class ImageType extends AbstractContainerAwareObjectType
 
     public function resolve($value = null, $args = [])
     {
-        if ($value && method_exists($value, 'getImage')) {
-            if($image = $value->getImage()) {
-                return $this->container
-                    ->get('youshido.image_helper')
-                    ->resize($image, $args['width'], $args['height'], $args['mode']);
+        $image = null;
+        if ($value) {
+            if ($value instanceof BaseImage) {
+                $image = $value;
+            } elseif (method_exists($value, 'getImage')) {
+                $image = $value->getImage();
             }
+        }
+
+        if ($image) {
+            $originalUr = $this->container->get('youshido.image_helper')->getOriginUrl($image);
+
+            /** @var $image BaseImage */
+            return [
+                'id'        => $image->getId(),
+                'originUrl' => $originalUr,
+                'resizable' => $image
+            ];
         }
 
         return null;
@@ -31,12 +43,9 @@ class ImageType extends AbstractContainerAwareObjectType
     public function build(TypeConfigInterface $config)
     {
         $config
-            ->addArgument('width', 'int', ['required' => true])
-            ->addArgument('height', 'int', ['required' => true])
-            ->addArgument('mode', new ThumbnailModeTypeEnum(), ['default' => 'OUTBOUND'])
-
             ->addField('id', 'id')
-            ->addField('url', 'string');
+            ->addField('originUrl', 'string')
+            ->addField('resizable', new ImageResizableType());
     }
 
     /**

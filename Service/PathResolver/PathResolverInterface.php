@@ -13,4 +13,6 @@ interface PathResolverInterface
 
     public function generateUrl($path, $filter);
 
+    public function generateOriginUrl($path);
+
 }

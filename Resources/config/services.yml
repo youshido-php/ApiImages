@@ -14,7 +14,7 @@ parameters:
 services:
     ######################     Path resolvers      ######################
 
-    youshido.images.path_resolver.local:
+    youshido.images.path_resolver:
         class: %youshido.images.path_resolver.default_class%
         calls:
             - [setContainer, [@service_container]]
@@ -33,7 +33,7 @@ services:
         arguments:
             - @liip_imagine.data.manager
             - @liip_imagine.filter.manager
-            - @youshido.images.path_resolver.local
+            - @youshido.images.path_resolver
         calls:
             - [ setContainer, [@service_container]]
         tags:
@@ -47,6 +47,7 @@ services:
         arguments:
             - @liip_imagine.cache.manager
             - @liip_imagine.filter.configuration
+            - @youshido.images.path_resolver
 
     youshido.image_provider:
         class: Youshido\ApiImagesBundle\Service\Provider

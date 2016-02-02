@@ -17,6 +17,16 @@ class LocalFilesystemPathResolver implements PathResolverInterface
 
     public function generateUrl($path, $filter)
     {
+        return $this->prepareUrl($path, $filter);
+    }
+
+    public function generateOriginUrl($path)
+    {
+        return $this->prepareUrl($path);
+    }
+
+    private function prepareUrl($path, $filter = '')
+    {
         $router = $this->container->get('router');
 
         $prefix = $this->container->getParameter('youshido.images.path_resolver.local.path_prefix');
@@ -27,7 +37,9 @@ class LocalFilesystemPathResolver implements PathResolverInterface
             $router->getContext()->getHost()
         );
 
-        return $host . $prefix . $filter . '/' . $path;
+        $filter = $filter ? $filter . '/' : '';
+
+        return $host . $prefix . $filter . $path;
     }
 
 }

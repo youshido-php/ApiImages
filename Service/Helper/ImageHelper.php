@@ -11,6 +11,7 @@ use Liip\ImagineBundle\Imagine\Cache\CacheManager;
 use Liip\ImagineBundle\Imagine\Filter\FilterConfiguration;
 use Youshido\ApiImagesBundle\Entity\BaseImage;
 use Youshido\ApiImagesBundle\GraphQL\Enum\ThumbnailModeTypeEnum;
+use Youshido\ApiImagesBundle\Service\PathResolver\PathResolverInterface;
 
 class ImageHelper
 {
@@ -26,23 +27,32 @@ class ImageHelper
     private $filterConfiguration;
 
     /**
+     * @var PathResolverInterface
+     */
+    private $pathResolver;
+
+    /**
      * ImageHelper constructor.
      *
-     * @param CacheManager        $cacheManager
-     * @param FilterConfiguration $filterConfiguration
+     * @param CacheManager          $cacheManager
+     * @param FilterConfiguration   $filterConfiguration
+     * @param PathResolverInterface $pathResolver
      */
-    public function __construct(CacheManager $cacheManager, FilterConfiguration $filterConfiguration)
+    public function __construct(CacheManager $cacheManager, FilterConfiguration $filterConfiguration, PathResolverInterface $pathResolver)
     {
         $this->cacheManager        = $cacheManager;
         $this->filterConfiguration = $filterConfiguration;
+        $this->pathResolver        = $pathResolver;
     }
 
     public function resize(BaseImage $image, $width, $height, $mode = ThumbnailModeTypeEnum::MODE_OUTBOUND)
     {
-        return [
-            'id'  => $image->getId(),
-            'url' => $this->prepareUrlForSize($image, $width, $height, $mode)
-        ];
+        return $this->prepareUrlForSize($image, $width, $height, $mode);
+    }
+
+    public function getOriginUrl(BaseImage $image)
+    {
+        return $this->pathResolver->generateOriginUrl($image->getPath());
     }
 
     private function prepareUrlForSize(BaseImage $image, $width, $height, $mode)
