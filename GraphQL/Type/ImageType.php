@@ -33,7 +33,7 @@ class ImageType extends AbstractContainerAwareObjectType
             return [
                 'id'        => $image->getId(),
                 'originUrl' => $originalUr,
-                'resizable' => $image
+                'resize'    => $image
             ];
         }
 
@@ -45,7 +45,7 @@ class ImageType extends AbstractContainerAwareObjectType
         $config
             ->addField('id', 'id')
             ->addField('originUrl', 'string')
-            ->addField('resizable', new ImageResizableType());
+            ->addField('resize', new ImageResizableType());
     }
 
     /**

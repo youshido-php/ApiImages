@@ -17,10 +17,10 @@ class ImageResizableType extends AbstractContainerAwareObjectType
 
     public function resolve($value = null, $args = [])
     {
-        if ($value && is_array($value) && array_key_exists('resizable', $value)) {
+        if ($value && is_array($value) && array_key_exists('resize', $value)) {
             $url = $this->container
                 ->get('youshido.image_helper')
-                ->resize($value['resizable'], $args['width'], $args['height'], $args['mode']);
+                ->resize($value['resize'], $args['width'], $args['height'], $args['mode']);
 
             return ['url' => $url];
         }

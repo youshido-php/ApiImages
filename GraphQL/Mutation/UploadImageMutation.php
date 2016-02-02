@@ -25,7 +25,7 @@ class UploadImageMutation extends AbstractContainerAwareMutationType
         return [
             'id'        => $image->getId(),
             'originUrl' => $originalUr,
-            'resizable' => $image
+            'resize'    => $image
         ];
     }
 
