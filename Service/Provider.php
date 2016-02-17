@@ -63,6 +63,25 @@ class Provider
         return $image;
     }
 
+    public function loadByBase64File($base64File)
+    {
+        $data = explode(',', $base64File);
+
+        $mimeType  = substr($data[0], 5, -7);
+        $extension = $this->loader->guessExtension($mimeType);
+
+        $tempImagePath = sprintf('%s.' . $extension, tempnam(sys_get_temp_dir(), "preview_"));
+        $ifp           = fopen($tempImagePath, "wb");
+        fwrite($ifp, base64_decode($data[1]));
+        fclose($ifp);
+
+        $image = $this->loadFromUrl($tempImagePath);
+
+        unlink($tempImagePath);
+
+        return $image;
+    }
+
     public function loadFromUrl($url)
     {
         $extension = pathinfo($url, PATHINFO_EXTENSION);

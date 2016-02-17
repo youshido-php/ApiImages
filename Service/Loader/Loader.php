@@ -71,4 +71,19 @@ class Loader implements LoaderInterface
 
         return array_key_exists($extension, $mimeTypes) ? $mimeTypes[$extension] : 'application/octet-stream';
     }
+
+    public function guessExtension($mimeType)
+    {
+        $extensions = [
+            'image/png'                => 'png',
+            'image/jpeg'               => 'jpeg',
+            'image/gif'                => 'gif',
+            'image/bmp'                => 'bmp',
+            'image/vnd.microsoft.icon' => 'ico',
+            'image/tiff'               => 'tiff',
+            'image/svg+xml'            => 'svg',
+        ];
+
+        return array_key_exists($mimeType, $extensions) ? $extensions[$mimeType] : 'application/octet-stream';
+    }
 }

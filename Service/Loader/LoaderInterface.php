@@ -29,4 +29,6 @@ interface LoaderInterface
 
     public function guessMimeType($extension);
 
+    public function guessExtension($mimeType);
+
 }
