@@ -13,11 +13,12 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
 use Youshido\ApiImagesBundle\Entity\BaseImage;
 use Youshido\ApiImagesBundle\Service\Loader\LoaderInterface;
+use Youshido\ApiImagesBundle\Traits\FilesystemTrait;
 
 class Provider
 {
 
-    use ContainerAwareTrait;
+    use ContainerAwareTrait, FilesystemTrait;
 
     /** @var  LoaderInterface */
     private $loader;
@@ -36,7 +37,8 @@ class Provider
         $image
             ->setMimeType($file->getMimeType())
             ->setPath($this->loader->upload($file))
-            ->setUserId($this->recognizeUserId());
+            ->setUserId($this->recognizeUserId())
+            ->setSize($file->getSize());
 
         $em = $this->container->get('doctrine')->getManager();
         $em->persist($image);
@@ -54,6 +56,7 @@ class Provider
         $image
             ->setMimeType($file->getMimeType())
             ->setPath($this->loader->upload($file))
+            ->setSize($file->getSize())
             ->setUserId($this->recognizeUserId());
 
         $em = $this->container->get('doctrine')->getManager();
@@ -98,6 +101,8 @@ class Provider
             ->setMimeType($this->loader->guessMimeType($extension))
             ->setPath($this->loader->uploadFromUrl($url))
             ->setUserId($this->recognizeUserId());
+
+        $image->setSize($this->getFilesystem()->size($image->getPath()));
 
         $em = $this->container->get('doctrine')->getManager();
         $em->persist($image);

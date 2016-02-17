@@ -41,6 +41,13 @@ class BaseImage
     private $userId;
 
     /**
+     * @var int
+     *
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $size;
+
+    /**
      * @var UploadedFile
      *
      * @Assert\NotNull(
@@ -136,6 +143,26 @@ class BaseImage
     public function setUserId($userId)
     {
         $this->userId = $userId;
+
+        return $this;
+    }
+
+    /**
+     * @return int
+     */
+    public function getSize()
+    {
+        return $this->size;
+    }
+
+    /**
+     * @param int $size
+     *
+     * @return BaseImage
+     */
+    public function setSize($size)
+    {
+        $this->size = $size;
 
         return $this;
     }
