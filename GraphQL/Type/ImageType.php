@@ -27,6 +27,12 @@ class ImageType extends AbstractContainerAwareObjectType
         }
 
         if ($image) {
+            $loader = $this->container->get('youshido.api_images.loader');
+
+            if (!$loader->checkExist($image->getPath())) {
+                return null;
+            }
+
             $originalUr = $this->container->get('youshido.image_helper')->getOriginUrl($image);
 
             /** @var $image BaseImage */
