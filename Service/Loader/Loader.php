@@ -57,7 +57,12 @@ class Loader implements LoaderInterface
 
         $filename = sprintf('%s/%s/%s/%s.%s', date('Y'), date('m'), date('d'), uniqid(), $extension);
 
-        $this->getFilesystem()->write($filename, file_get_contents($url));
+        $this->getFilesystem()->write($filename, file_get_contents($url, null, [
+            stream_context_create(["ssl" => [
+                "verify_peer"      => false,
+                "verify_peer_name" => false,
+            ]])
+        ]));
 
         return $filename;
     }
