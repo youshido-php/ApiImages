@@ -39,6 +39,15 @@ class Loader implements LoaderInterface
         return $filename;
     }
 
+    public function checkExist($filename)
+    {
+        try {
+            return $this->getFilesystem()->has($filename);
+        }catch (\Exception $e) {
+            return false;
+        }
+    }
+
     public function uploadFromUrl($url)
     {
         $extension = pathinfo($url, PATHINFO_EXTENSION);
