@@ -32,20 +32,11 @@ class Loader implements LoaderInterface
      */
     public function upload(UploadedFile $file)
     {
-        $filename = sprintf('%s/%s/%s/%s.%s', date('Y'), date('m'), date('d'), uniqid(), $file->getClientOriginalExtension());
+        $filename = $this->generateFilePath($file->getClientOriginalExtension());
 
         $this->getFilesystem()->write($filename, file_get_contents($file->getPathname()));
 
         return $filename;
-    }
-
-    public function checkExist($filename)
-    {
-        try {
-            return $this->getFilesystem()->has($filename);
-        }catch (\Exception $e) {
-            return false;
-        }
     }
 
     public function uploadFromUrl($url)
@@ -55,16 +46,16 @@ class Loader implements LoaderInterface
             $extension = substr($extension, 0, strpos($extension, '?'));
         }
 
-        $filename = sprintf('%s/%s/%s/%s.%s', date('Y'), date('m'), date('d'), uniqid(), $extension);
+        $filename = $this->generateFilePath($extension);
 
-        $this->getFilesystem()->write($filename, file_get_contents($url, null, [
-            stream_context_create(["ssl" => [
-                "verify_peer"      => false,
-                "verify_peer_name" => false,
-            ]])
-        ]));
+        $this->getFilesystem()->write($filename, file_get_contents($url));
 
         return $filename;
+    }
+
+    public function generateFilePath($extension)
+    {
+        return sprintf('%s/%s/%s/%s.%s', date('Y'), date('m'), date('d'), uniqid(), $extension);
     }
 
     public function guessMimeType($extension)
