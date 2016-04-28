@@ -34,16 +34,28 @@ class Loader implements LoaderInterface
     {
         $filename = $this->generateFilePath($file->getClientOriginalExtension());
 
-        $this->getFilesystem()->write($filename, file_get_contents($file->getPathname()));
+        $this->getFilesystem()->write($filename, $this->getContent($file->getPathname()));
 
         return $filename;
+    }
+
+    protected function getContent($path)
+    {
+        $contextOptions = [
+            "ssl" => [
+                "verify_peer"      => false,
+                "verify_peer_name" => false,
+            ],
+        ];
+
+        return file_get_contents($path, null, stream_context_create($contextOptions));
     }
 
     public function checkExist($filename)
     {
         try {
             return $this->getFilesystem()->has($filename);
-        }catch (\Exception $e) {
+        } catch (\Exception $e) {
             return false;
         }
     }
@@ -57,7 +69,7 @@ class Loader implements LoaderInterface
 
         $filename = $this->generateFilePath($extension);
 
-        $this->getFilesystem()->write($filename, file_get_contents($url));
+        $this->getFilesystem()->write($filename, $this->getContent($url));
 
         return $filename;
     }
