@@ -9,13 +9,12 @@ namespace Youshido\ApiImagesBundle\GraphQL\Type;
 
 
 use Youshido\ApiImagesBundle\GraphQL\Enum\ThumbnailModeTypeEnum;
-use Youshido\GraphQL\Type\Config\TypeConfigInterface;
 use Youshido\GraphQLBundle\Type\AbstractContainerAwareObjectType;
 
 class ImageResizableType extends AbstractContainerAwareObjectType
 {
 
-    public function resolve($value = null, $args = [])
+    public function resolve($value = null, $args = [], $type = null)
     {
         if ($value && is_array($value) && array_key_exists('resize', $value)) {
             $url = $this->container
@@ -28,7 +27,7 @@ class ImageResizableType extends AbstractContainerAwareObjectType
         return null;
     }
 
-    public function build(TypeConfigInterface $config)
+    public function build($config)
     {
         $config
             ->addArgument('width', 'int', ['required' => true])

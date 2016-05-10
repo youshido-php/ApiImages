@@ -9,12 +9,11 @@ namespace Youshido\ApiImagesBundle\GraphQL\Mutation;
 
 use Youshido\ApiImagesBundle\Entity\BaseImage;
 use Youshido\ApiImagesBundle\GraphQL\Type\ImageType;
-use Youshido\GraphQL\Type\Config\TypeConfigInterface;
 use Youshido\GraphQLBundle\Type\AbstractContainerAwareMutationType;
 
 class UploadImageMutation extends AbstractContainerAwareMutationType
 {
-    public function resolve($value = null, $args = [])
+    public function resolve($value = null, $args = [], $type = null)
     {
         /** @var $image BaseImage */
         $image = $this->container->get('youshido.image_provider')
@@ -29,10 +28,9 @@ class UploadImageMutation extends AbstractContainerAwareMutationType
         ];
     }
 
-    public function build(TypeConfigInterface $config)
+    public function build($config)
     {
-        $config
-            ->addArgument('field', 'string', ['default' => 'image']);
+        $config->addArgument('field', 'string', ['default' => 'image']);
     }
 
     public function getOutputType()

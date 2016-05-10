@@ -9,13 +9,12 @@ namespace Youshido\ApiImagesBundle\GraphQL\Type;
 
 
 use Youshido\ApiImagesBundle\Entity\BaseImage;
-use Youshido\GraphQL\Type\Config\TypeConfigInterface;
 use Youshido\GraphQLBundle\Type\AbstractContainerAwareObjectType;
 
 class ImageType extends AbstractContainerAwareObjectType
 {
 
-    public function resolve($value = null, $args = [])
+    public function resolve($value = null, $args = [], $type = null)
     {
         $image = null;
         if ($value) {
@@ -46,7 +45,7 @@ class ImageType extends AbstractContainerAwareObjectType
         return null;
     }
 
-    public function build(TypeConfigInterface $config)
+    public function build($config)
     {
         $config
             ->addField('id', 'id')
