@@ -54,6 +54,7 @@ class BaseImage
      *     groups={"verify-upload"},
      * )
      * @Assert\Image(
+     *     maxSize="5M",
      *     groups={"verify-upload"},
      * )
      */
