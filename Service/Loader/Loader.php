@@ -7,7 +7,6 @@
 
 namespace Youshido\ApiImagesBundle\Service\Loader;
 
-use Gaufrette\Adapter;
 use Symfony\Component\DependencyInjection\ContainerAwareTrait;
 use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Youshido\ApiImagesBundle\Traits\FilesystemTrait;
@@ -32,7 +31,8 @@ class Loader implements LoaderInterface
      */
     public function upload(UploadedFile $file)
     {
-        $filename = $this->generateFilePath($file->getClientOriginalExtension());
+        $extension = $file->getClientOriginalExtension() ?: $file->guessExtension();
+        $filename  = $this->generateFilePath($extension ?: ''); //rething logic here
 
         $this->getFilesystem()->write($filename, $this->getContent($file->getPathname()));
 
