@@ -1,6 +1,6 @@
 # API Images Bundle
 
-Symfony bundle easy implement images to your GraphQL API ( bundle for GraphQL implementation and its documentation is [here](https://github.com/Youshido/GraphQLBundle) ). It provides `UploadImageMutation`:
+Symfony bundle for easy implementation images to your GraphQL API ( bundle with GraphQL implementation and its documentation is [here](https://github.com/Youshido/GraphQLBundle) ). Bundle provides `UploadImageMutation`:
 ``` graphql
 mutation {
   uploadImage(field: "image") {
@@ -15,7 +15,7 @@ mutation {
 ```
 
 Mutation assumes that request content-type is `multipart/form-data` and include image data in field that is passed as argument `field`.
-Also bundle provides 'ImageField' to use in your API like this:
+Also bundle provides `ImageField` to use in your API like this:
 ``` graphql
 {
   me {
@@ -34,15 +34,15 @@ Also bundle provides 'ImageField' to use in your API like this:
 ```
 
 ## How to use
-* [Installation](#installation)
-* [Configuration](#configuration)
-* [Entity set-up](#)
-  * [ORM way](#)
-  * [ODM way](#)
-* [GraphQL schema set-up](#)
-  * [Mutation type](#)
-  * [Custom type](#)
-  * [Resolver](#)
+* [Installation](#1-installation)
+* [Configuration](#2-configuration)
+* [Entity set-up](#3-set-up-your-entities)
+  * [ORM way](#31-orm-set-up)
+  * [ODM way](#31-odm-set-up)
+* [GraphQL schema set-up](#4-set-up-graphql-schema)
+  * [Mutation type](#41-add-uploadimagemutation-to-your-mutationtype)
+  * [Custom type](#42-add-image-field-to-your-type)
+  * [Resolver](#43-setupdate-image-in-your-field-resolver)
 
 ### 1. Installation:
 > composer require youshido/api-images
@@ -72,7 +72,7 @@ images:
 
 ```
 
-### 3.Set-up your entities
+### 3 Set-up your entities
 #### 3.1 ORM set-up
 Add image property and implement `ImageableInterface` to your entity:
 ```php
