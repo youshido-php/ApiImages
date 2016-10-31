@@ -1,64 +1,33 @@
 <?php
 /**
- * Date: 05.01.16
+ * Date: 12.10.16
  *
  * @author Portey Vasil <portey@gmail.com>
  */
 
-namespace Youshido\ApiImagesBundle\GraphQL\Type;
+namespace Youshido\ImagesBundle\GraphQL\Type;
 
 
-use Youshido\ApiImagesBundle\Entity\BaseImage;
-use Youshido\GraphQL\Type\Config\TypeConfigInterface;
-use Youshido\GraphQLBundle\Type\AbstractContainerAwareObjectType;
+use Youshido\GraphQL\Config\Object\ObjectTypeConfig;
+use Youshido\GraphQL\Type\Object\AbstractObjectType;
+use Youshido\GraphQL\Type\Scalar\IdType;
+use Youshido\GraphQL\Type\Scalar\StringType;
+use Youshido\ImagesBundle\GraphQL\Field\Mutation\ResizedField;
 
-class ImageType extends AbstractContainerAwareObjectType
+class ImageType extends AbstractObjectType
 {
 
-    public function resolve($value = null, $args = [])
-    {
-        $image = null;
-        if ($value) {
-            if ($value instanceof BaseImage) {
-                $image = $value;
-            } elseif (method_exists($value, 'getImage')) {
-                $image = $value->getImage();
-            }
-        }
-
-        if ($image) {
-            $loader = $this->container->get('youshido.api_images.loader');
-
-            if (!$loader->checkExist($image->getPath())) {
-                return null;
-            }
-
-            $originalUr = $this->container->get('youshido.image_helper')->getOriginUrl($image);
-
-            /** @var $image BaseImage */
-            return [
-                'id'        => $image->getId(),
-                'originUrl' => $originalUr,
-                'resize'    => $image
-            ];
-        }
-
-        return null;
-    }
-
-    public function build(TypeConfigInterface $config)
-    {
-        $config
-            ->addField('id', 'id')
-            ->addField('originUrl', 'string')
-            ->addField('resize', new ImageResizableType());
-    }
-
     /**
-     * @return String type name
+     * @param ObjectTypeConfig $config
+     *
+     * @return mixed
      */
-    public function getName()
+    public function build($config)
     {
-        return 'ImageType';
+        $config->addFields([
+            'id'      => new IdType(),
+            'url'     => new StringType(),
+            new ResizedField()
+        ]);
     }
 }

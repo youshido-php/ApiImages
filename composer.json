@@ -1,7 +1,7 @@
 {
     "name": "youshido/api-images",
-    "description": "Load providers and resize helpers for images.",
-    "keywords": ["upload", "images", "api", "symfony", "resize"],
+    "description": "Library to implement images to GraphQL API",
+    "keywords": ["graphql", "image", "upload", "api", "symfony", "resize"],
     "type": "symfony-bundle",
     "license": "MIT",
     "authors": [
@@ -11,11 +11,10 @@
         }
     ],
     "require": {
-      "knplabs/knp-gaufrette-bundle": "^0.2.0",
-      "liip/imagine-bundle": "^1.3",
-      "php": ">=5.5.11"
+      "imagine/imagine": "^0.6.3",
+      "php": ">=7.0.0"
     },
     "autoload": {
-      "psr-4": { "Youshido\\ApiImagesBundle\\": "" }
+      "psr-4": { "Youshido\\ImagesBundle\\": "" }
     }
 }

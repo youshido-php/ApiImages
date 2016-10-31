@@ -1,61 +1,43 @@
 parameters:
-    youshido.images.loader.gaufrette_filesystem: images
-    youshido.images.loader.gaufrette_cache_resolver.class: Youshido\ApiImagesBundle\Service\Resolver\GaufretteResolver
-
-    youshido.images.path_resolver.default_class: Youshido\ApiImagesBundle\Service\PathResolver\LocalFilesystemPathResolver
-    youshido.images.path_resolver.local.path_prefix: uploads/filesystem
-    youshido.images.path_resolver.amazons3.filesystem_service: gaufrette.images_filesystem
-
-    # !!! config from this line must be moved to main config.yml file
-    liip_imagine.cache.manager.class: Youshido\ApiImagesBundle\Service\Manager\CacheManager
-    liip_imagine.data.manager.class: Youshido\ApiImagesBundle\Service\Manager\DataManager
-    liip_imagine.filter.manager.class: Youshido\ApiImagesBundle\Service\Manager\FilterManager
+    api_images.classes.loader:           "Youshido\\ImagesBundle\\Services\\Loader"
+    api_images.classes.path_geherator:   "Youshido\\ImagesBundle\\Services\\PathGenerator\\DatePathGenerator"
+    api_images.classes.saver:            "Youshido\\ImagesBundle\\Services\\Saver\\LocalFilesystemSaver"
+    api_images.classes.path_resolver:    "Youshido\\ImagesBundle\\Services\\PathResolver\\LocalPathResolver"
+    api_images.classes.resizer:          "Youshido\\ImagesBundle\\Services\\Resizer"
+    api_images.classes.image_controller: "Youshido\\ImagesBundle\\Controller\\ImageController"
 
 services:
-    ######################     Path resolvers      ######################
 
-    youshido.images.path_resolver:
-        class: %youshido.images.path_resolver.default_class%
-        calls:
-            - [setContainer, [@service_container]]
-
-    ######################     Gaufrette config    ######################
-
-    youshido.images.loader.stream.images:
-        class: "%liip_imagine.binary.loader.stream.class%"
+    api_images.resizer:
+        class: "%api_images.classes.resizer%"
         arguments:
-            - 'gaufrette://images/'
-        tags:
-            - { name: 'liip_imagine.binary.loader', loader: 'stream.project_images' }
+            - "@api_images.saver"
+            - "@api_images.path_resolver"
+            - "%api_images.config.driver%"
 
-    youshido.images.cache.resolver.images:
-        class: %youshido.images.loader.gaufrette_cache_resolver.class%
+    api_images.loader:
+        public: false
+        class: "%api_images.classes.loader%"
         arguments:
-            - @liip_imagine.data.manager
-            - @liip_imagine.filter.manager
-            - @youshido.images.path_resolver
-        calls:
-            - [ setContainer, [@service_container]]
-        tags:
-            - { name: 'liip_imagine.cache.resolver', resolver: 'youshido.images.resolver' }
+            - "@api_images.path_resolver"
+            - "@api_images.path_geherator"
+            - "@api_images.saver"
 
+    api_images.path_geherator:
+        public: false
+        class: "%api_images.classes.path_geherator%"
 
-    ######################     providers      ######################
+    api_images.saver:
+        public: false
+        class: "%api_images.classes.saver%"
 
-    youshido.image_helper:
-        class: Youshido\ApiImagesBundle\Service\Helper\ImageHelper
+    api_images.path_resolver:
+        public: false
+        class: "%api_images.classes.path_resolver%"
         arguments:
-            - @liip_imagine.cache.manager
-            - @liip_imagine.filter.configuration
-            - @youshido.images.path_resolver
+            - "@router"
+            - "%api_images.config.web_root%"
+            - "%api_images.config.path_prefix%"
+            - "%api_images.config.host%"
+            - "%api_images.config.scheme%"
 
-    youshido.image_provider:
-        class: Youshido\ApiImagesBundle\Service\Provider
-        arguments: [@youshido.api_images.loader]
-        calls:
-            - [ setContainer, [@service_container]]
-
-    youshido.api_images.loader:
-        class: Youshido\ApiImagesBundle\Service\Loader\Loader
-        calls:
-            - [ setContainer, [@service_container]]
