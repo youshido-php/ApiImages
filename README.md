@@ -145,11 +145,6 @@ use Youshido\ImagesBundle\GraphQL\Field\Mutation\UploadImageField;
 class MutationType extends AbstractObjectType
 {
 
-    /**
-     * @param ObjectTypeConfig $config
-     *
-     * @return mixed
-     */
     public function build($config)
     {
 
@@ -175,6 +170,8 @@ class CategoryType extends AbstractObjectType
     public function build($config)
     {
         $config->addFields([
+            // category fields
+        
             new ImageField()
         ]);
     }
