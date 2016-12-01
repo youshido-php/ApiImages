@@ -48,29 +48,24 @@ class ImageField extends AbstractField
         if ($value) {
             if ($value instanceof ODMImageableInterface || $value instanceof ORMImageableInterface || (is_object($value) && method_exists($value, 'getImage'))) {
                 if ($image = $value->getImage()) {
-                    return $this->resolveData($image, $info);
-                }
+                    if (!empty($args['width']) || !empty($args['height'])) {
+                        $url = $info->getContainer()->get('api_images.resizer')->getPathResolver()->resolveWebResizablePath(
+                            new ResizeConfig($args['width'], $args['height'], $args['mode']),
+                            $image
+                        );
+                    } else {
+                        $url = $info->getContainer()->get('api_images.path_resolver')->resolveWebPath($image);
+                    }
+
+                    return [
+                        'id'    => $image instanceof EmbeddedImage ? $image->getReferenceId() : $image->getId(),
+                        'url'   => $url,
+                        'image' => $image
+                    ];                }
             }
         }
 
         return null;
-    }
-
-    protected function resolveData($image, $info) {
-        if (!empty($args['width']) || !empty($args['height'])) {
-            $url = $info->getContainer()->get('api_images.resizer')->getPathResolver()->resolveWebResizablePath(
-                new ResizeConfig($args['width'], $args['height'], $args['mode']),
-                $image
-            );
-        } else {
-            $url = $info->getContainer()->get('api_images.path_resolver')->resolveWebPath($image);
-        }
-
-        return [
-            'id'    => $image instanceof EmbeddedImage ? $image->getReferenceId() : $image->getId(),
-            'url'   => $url,
-            'image' => $image
-        ];
     }
 
     /**
