@@ -30,7 +30,25 @@ Also bundle provides `ImageField` to use in your API like this:
     }
   }
 }
-
+```
+or you can add arguments directly to the image field for your convenience.
+``` graphql
+{
+  me {
+    id
+    firstName
+    lastName
+    small: image(width: 100, height: 100, mode: INSET) { // resized directly
+      url
+    }    
+    medium: image(width: 500, height: 300, mode: OUTBOUND) { // different mode
+      url
+    }    
+    fullSize: image {
+      url
+    }
+  }
+}
 ```
 
 ## How to use
