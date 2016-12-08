@@ -1,6 +1,6 @@
 parameters:
     api_images.classes.loader:           "Youshido\\ImagesBundle\\Services\\Loader"
-    api_images.classes.path_geherator:   "Youshido\\ImagesBundle\\Services\\PathGenerator\\DatePathGenerator"
+    api_images.classes.path_generator:   "Youshido\\ImagesBundle\\Services\\PathGenerator\\DatePathGenerator"
     api_images.classes.saver:            "Youshido\\ImagesBundle\\Services\\Saver\\LocalFilesystemSaver"
     api_images.classes.path_resolver:    "Youshido\\ImagesBundle\\Services\\PathResolver\\LocalPathResolver"
     api_images.classes.resizer:          "Youshido\\ImagesBundle\\Services\\Resizer"
@@ -20,12 +20,12 @@ services:
         class: "%api_images.classes.loader%"
         arguments:
             - "@api_images.path_resolver"
-            - "@api_images.path_geherator"
+            - "@api_images.path_generator"
             - "@api_images.saver"
 
-    api_images.path_geherator:
+    api_images.path_generator:
         public: false
-        class: "%api_images.classes.path_geherator%"
+        class: "%api_images.classes.path_generator%"
 
     api_images.saver:
         public: false
