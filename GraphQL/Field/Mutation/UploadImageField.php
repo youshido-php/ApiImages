@@ -23,7 +23,7 @@ class UploadImageField extends AbstractField
         $config->addArguments([
             'field' => [
                 'type'    => new StringType(),
-                'default' => 'image'
+                'defaultValue' => 'image'
             ]
         ]);
     }

@@ -29,7 +29,7 @@ class ResizedField extends AbstractField
             'height' => new NonNullType(new IntType()),
             'mode'   => [
                 'type'    => new ResizeImageModeType(),
-                'default' => 'outbound'
+                'defaultValue' => 'outbound'
             ]
         ]);
     }
