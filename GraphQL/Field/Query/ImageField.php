@@ -29,15 +29,15 @@ class ImageField extends AbstractField
         $config->addArguments([
             'width'  => [
                 'type'    => new IntType(),
-                'default' => 0
+                'defaultValue' => 0
             ],
             'height' => [
                 'type'    => new IntType(),
-                'default' => 0
+                'defaultValue' => 0
             ],
             'mode'   => [
                 'type'    => new ResizeImageModeType(),
-                'default' => 'outbound'
+                'defaultValue' => 'outbound'
             ]
         ]);
     }
