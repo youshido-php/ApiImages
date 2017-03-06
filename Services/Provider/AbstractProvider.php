@@ -94,7 +94,7 @@ abstract class AbstractProvider
         ];
 
         if (!array_key_exists($extension, $mimeTypes)) {
-            throw new \Exception(sprintf('Extension "%s" not supported', $extension));
+            return 'image/jpeg';
         }
 
         return $mimeTypes[$extension];
