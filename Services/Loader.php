@@ -46,6 +46,9 @@ class Loader
         if (strpos($extension, '?') !== false) {
             $extension = substr($extension, 0, strpos($extension, '?'));
         }
+        if (empty($extension)) {
+            $extension = 'jpg';
+        }
 
         return $this->doUpload($extension, $this->fileGetContent($url));
     }
